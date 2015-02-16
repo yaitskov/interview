@@ -5,32 +5,47 @@
 
 using namespace std;
 
-template <typename Array>
+template <typename Item>
 struct Image {
-  typedef Array& aref;
+  Item* const pixels;
+  const int   size;
 
-  static void flip(aref pixels, int size) {
+  Image(int size) : pixels(new Item[size * size]), size(size) {}
+  ~Image() { delete[] pixels; }
+
+  Image& setRow(const Item* rowData, int rowNumber) {
+    for (int col = 0; col < size; ++col) {
+      at(rowNumber, col) = rowData[col];
+    }
+    return *this;
+  }
+
+  Item& at(int row, int col) {
+    return pixels[row * size + col];
+  }
+
+  void flip() {
     for (int row = 0; row < size; ++row) {
       int lcol = 0;
       int rcol = size - 1;
       while (lcol < rcol) {
-        swap(pixels[row][lcol++], pixels[row][rcol--]);
+        swap(at(row, lcol++), at(row,rcol--));
       }
     }
   }
 
-  static void transpose(aref pixels, int size) {
+  void transpose() {
     for (int i = 0; i < size; ++i) {
       for (int j = i + 1; j < size; ++j) {
-        swap(pixels[i][j], pixels[j][i]);
+        swap(at(i, j), at(j, i));
       }
     }
   }
 
-  static void print(aref pixels, int size) {
+  void print() {
     for (int row = 0; row < size; ++row) {
       for (int col = 0; col < size; ++col) {
-        cout << " " << pixels[row][col];
+        cout << " " << at(row, col);
       }
       cout << endl;
     }
@@ -38,16 +53,15 @@ struct Image {
 };
 
 int main() {
-  int pixels[][3] = {
-    {1, 1, 1},
-    {2, 2, 2},
-    {3, 3, 3},
-  };
+  Image<int> img(3);
+  img.setRow((const int[]) {1, 1, 1}, 0)
+    .setRow((const int[]) {2, 2, 2}, 1)
+    .setRow((const int[]) {3, 3, 3}, 2);
   cout << "Before ---------------------------------" << endl;
-  Image<int[3][3]>::print(pixels, 3);
-  Image<int[3][3]>::transpose(pixels, 3);
-  Image<int[3][3]>::flip(pixels, 3);
+  img.print();
+  img.transpose();
+  img.flip();
   cout << "After ---------------------------------" << endl;
-  Image<int[3][3]>::print(pixels, 3);
+  img.print();
   return 0;
 }

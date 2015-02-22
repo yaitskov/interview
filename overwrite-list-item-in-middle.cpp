@@ -20,7 +20,7 @@ struct Item {
     assert(next);
     //swap(const_cast<T&>(this->data), const_cast<T&>(next->data));
     const_cast<T&>(this->data) = move(next->data);
-    next.reset(next->next.release());
+    next = move(next->next);
   }
 };
 

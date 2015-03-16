@@ -45,7 +45,10 @@ struct Image {
   void print() {
     for (int row = 0; row < size; ++row) {
       for (int col = 0; col < size; ++col) {
-        cout << " " << at(row, col);
+        cout << at(row, col);
+        if (col + 1 != size) {
+          cout << " ";
+        }
       }
       cout << endl;
     }
@@ -53,15 +56,18 @@ struct Image {
 };
 
 int main() {
-  Image<int> img(3);
-  img.setRow((const int[]) {1, 1, 1}, 0)
-    .setRow((const int[]) {2, 2, 2}, 1)
-    .setRow((const int[]) {3, 3, 3}, 2);
-  cout << "Before ---------------------------------" << endl;
-  img.print();
+  int matrixSize;
+  cin >> matrixSize;
+  Image<int> img(matrixSize);
+  int* inRow = new int[matrixSize];
+  for (int i = 0; i < matrixSize; ++i) {
+    for (int j = 0; j < matrixSize; ++j) {
+      cin >> inRow[j];
+    }
+    img.setRow(inRow, i);
+  }
   img.transpose();
   img.flip();
-  cout << "After ---------------------------------" << endl;
   img.print();
   return 0;
 }

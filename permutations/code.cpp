@@ -32,8 +32,7 @@ vector<vector<T> > permutate(const vector<T>& input) {
   return result;
 }
 
-void test(vector<int> input) {
-  cout << "----------------------" << endl;
+void test(const vector<int>& input) {
   auto result = permutate(input);
   for (auto v : result) {
     for (auto i : v) {
@@ -44,9 +43,15 @@ void test(vector<int> input) {
 }
 
 int main() {
-  test({});
-  test({1});
-  test({1,2});
-  test({1,2,3});
-  test({1,2,3,4});
+  vector<int> input;
+  int a;
+  while (true) {
+    cin >> a;
+    if (cin) {
+      input.push_back(a);
+    } else {
+      break;
+    }
+  }
+  test(input);
 }

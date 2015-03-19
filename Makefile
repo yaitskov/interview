@@ -33,7 +33,7 @@ build: $(OUTS)
 clean:
 	find \( -name '*.exe' -o -name '*.out' -o -name 'code' \) -type f  -exec rm -rf {} \;
 %.run: %.exe
-	$< || echo -n
+	./$< || echo -n
 
 %.exe: %.cpp
 	$(CC) $(CFLAGS) -o $@ $<

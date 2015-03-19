@@ -7,11 +7,15 @@ PROCESSES = $(patsubst %.cpp, %.run, $(SOURCES))
 
 all: $(PROCESSES) tall
 TESTS = $(patsubst %.in,%.test,$(wildcard */*.in))
+CODES = $(patsubst %.cpp,%,$(wildcard */code.cpp))
+
+define C_template
+$(1): $(1).cpp
+	$(CC) $(CFLAGS) -o $$@ $$^
+endef
+$(foreach code, $(CODES), $(eval $(call C_template,$(code))))
 
 define TT_template
-$(dir $(1))code: $(dir $(1))code.cpp
-	$(CC) $(CFLAGS) -o $$@ $$^
-
 $(1): $(dir $(1))code
 	$$< < $(patsubst %.test, %.in, $(1)) > $(patsubst %.test, %.out, $(1))
 	cmp $(patsubst %.test, %.out, $(1)) $(patsubst %.test, %.exp, $(1))

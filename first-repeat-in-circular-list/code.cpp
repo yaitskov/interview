@@ -1,16 +1,14 @@
 #include<iostream>
 #include<map>
-#include<cctype>
 using namespace std;
 
+typedef char Payload;
 struct Node {
-  const char payload;
+  const Payload payload;
   Node * next;
 
   Node(char payload) : payload(payload), next(nullptr) {}
 };
-
-typedef char Payload;
 
 static Node * readList(istream& in);
 static Node * findFirstRepeat(Node * head);
@@ -31,11 +29,11 @@ static Node * readList(istream& in) {
   Node * tail = nullptr;
   Node * head = nullptr;
   while (true) {
-    char payload;
+    Payload payload;
     cin >> payload;
     if (!cin) {
       break;
-    } else if (isalpha(payload)) {
+    } else {
       if (tail) {
         auto iter = payload2Addr.find(payload);
         if (payload2Addr.end() == iter) {

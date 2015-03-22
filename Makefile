@@ -1,7 +1,7 @@
 CC = g++
 CFLAGS = -std=c++11
 SOURCES = $(filter-out null-or-cycle.cpp, $(wildcard *.cpp))
-OUTS = $(patsubst %.cpp, %.exe, $(SOURCES))
+OUTS = $(patsubst %.cpp, build/%.exe, $(SOURCES))
 PROCESSES = $(patsubst %.cpp, %.run, $(SOURCES))
 .PHONY: clean all
 
@@ -10,15 +10,17 @@ TESTS = $(patsubst %.in,%.test,$(wildcard */*.in))
 CODES = $(patsubst %.cpp,%,$(wildcard */code.cpp))
 
 define C_template
-$(1): $(1).cpp
+build/$(1): $(1).cpp
+	mkdir -p $(dir build/$(1))
 	$(CC) $(CFLAGS) -o $$@ $$^
 endef
 $(foreach code, $(CODES), $(eval $(call C_template,$(code))))
 
 define TT_template
-$(1): $(dir $(1))code
-	$$< < $(patsubst %.test, %.in, $(1)) > $(patsubst %.test, %.out, $(1))
-	cmp $(patsubst %.test, %.out, $(1)) $(patsubst %.test, %.exp, $(1))
+$(1): build/$(dir $(1))code
+	mkdir -p build/$(dir $(1))
+	$$< < $(patsubst %.test,%.in,$(1)) > build/$(patsubst %.test,%.out,$(1))
+	cmp build/$(patsubst %.test,%.out,$(1)) $(patsubst %.test,%.exp,$(1))
 endef
 $(foreach test, $(TESTS), $(eval $(call TT_template,$(test))))
 
@@ -31,9 +33,9 @@ tall: $(TESTS)
 build: $(OUTS)
 
 clean:
-	find \( -name '*.exe' -o -name '*.out' -o -name 'code' \) -type f  -exec rm -rf {} \;
-%.run: %.exe
+	rm -rf build
+%.run: build/%.exe
 	./$< || echo -n
-
-%.exe: %.cpp
+build/%.exe: %.cpp
+	mkdir -p build
 	$(CC) $(CFLAGS) -o $@ $<

@@ -35,7 +35,7 @@ build: $(OUTS)
 clean:
 	rm -rf build
 %.run: build/%.exe
-	./$< || echo -n
+	./$<
 build/%.exe: %.cpp
 	mkdir -p build
 	$(CC) $(CFLAGS) -o $@ $<

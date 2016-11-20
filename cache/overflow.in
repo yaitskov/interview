@@ -1,0 +1,7 @@
+5
+1
+set x hello
+get x
+set y bye
+get x
+get y

@@ -1,0 +1,9 @@
+7
+3
+set x hello
+set y bye
+set z żabka
+get y
+get z
+get y
+get x

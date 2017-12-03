@@ -1,0 +1,8 @@
+Philadelphia, Pittsburgh
+Boston, New York
+Hartford, New York
+Los Angeles, San Diego
+San Diego, Hartford
+New York, Albany
+St Petersburgh, Tampa
+Albany, Trenton
